@@ -50,6 +50,9 @@ add_executable(${PROJECT_NAME}
     src/utils/cube.h src/utils/cube.cpp
     src/utils/cone.h src/utils/cone.cpp
     src/utils/sphere.h src/utils/sphere.cpp
+    src/utils/gbuffer.h src/utils/gbuffer.cpp
+    src/utils/deferredrenderer.h src/utils/deferredrenderer.cpp
+    src/utils/postprocesspass.h src/utils/postprocesspass.cpp
 
 
 )
