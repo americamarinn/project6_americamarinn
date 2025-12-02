@@ -1,14 +1,16 @@
 #pragma once
-
-#include <GL/glew.h>
-#include "utils/shaderloader.h"
-#include "utils/GBuffer.h"
+#include "gbuffer.h"
+#include "shaderprogram.h"
 
 class DeferredRenderer {
 public:
-    GBuffer *gbuf;          // pointer to the GBuffer you created
-    ShaderProgram *shader;  // the shader used for deferred shading
+    DeferredRenderer();
+    ~DeferredRenderer();
+    void init();
+    void render(GBuffer* gbuf, int w, int h);
 
-    DeferredRenderer(GBuffer *gb);
-    void render();
+private:
+    ShaderProgram* shaderDeferred;
+    GLuint quadVAO;
+    GLuint quadVBO;
 };

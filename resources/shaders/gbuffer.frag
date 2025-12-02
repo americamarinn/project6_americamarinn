@@ -6,7 +6,7 @@ layout(location = 3) out vec4 gEmissive;
 
 in vec3 worldPos;
 in vec3 worldNormal;
-in vec2 uv;
+in vec2 texCoord;
 
 uniform vec3 baseColor;
 uniform float emissiveStrength;

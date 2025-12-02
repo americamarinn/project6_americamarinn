@@ -5,7 +5,7 @@ layout(location = 2) in vec2 uv_in;
 
 out vec3 worldPos;
 out vec3 worldNormal;
-out vec2 uv;
+out vec2 texCoord;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -15,7 +15,7 @@ void main() {
     vec4 wp = model * vec4(pos, 1.0);
     worldPos = wp.xyz;
     worldNormal = mat3(model) * nor;
-    uv = uv_in;
+    texCoord = uv_in;
 
     gl_Position = proj * view * wp;
 }

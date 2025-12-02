@@ -1,84 +1,93 @@
 #pragma once
-
-// Defined before including GLEW to suppress deprecation messages on macOS
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #endif
+
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-#include <unordered_map>
-#include <QElapsedTimer>
 #include <QOpenGLWidget>
+#include <QElapsedTimer>
 #include <QTime>
-#include <QTimer>
+#include <unordered_map>
 
 #include "utils/sceneparser.h"
 #include "utils/camera.h"
+
+#include "utils/gbuffer.h"
+#include "utils/deferredrenderer.h"
+#include "utils/postprocesspass.h"
+#include "utils/shaderprogram.h"
 
 class Realtime : public QOpenGLWidget
 {
 public:
     Realtime(QWidget *parent = nullptr);
-    void finish();                                      // Called on program exit
+    void finish();
+
     void sceneChanged();
     void settingsChanged();
     void saveViewportImage(std::string filePath);
 
-public slots:
-    void tick(QTimerEvent* event);                      // (unused, but fine to keep)
-
 protected:
-    void initializeGL() override;                       // Called once at the start of the program
-    void paintGL() override;                            // Called whenever the OpenGL context changes or by an update() request
-    void resizeGL(int width, int height) override;      // Called when window size changes
+    void initializeGL() override;
+    void paintGL() override;
+    void resizeGL(int w, int h) override;
+
+    void timerEvent(QTimerEvent *event) override;
+    void keyPressEvent(QKeyEvent*) override;
+    void keyReleaseEvent(QKeyEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseReleaseEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
 
 private:
-    void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void timerEvent(QTimerEvent *event) override;
+    // Geometry pass
+    void renderGeometryPass();
 
-    // Scene and Camera
+    // Scene data
     RenderData m_renderData;
     Camera m_camera;
 
-    // Interactive camera state (for movement)
-    glm::vec3 m_camPos   = glm::vec3(0.f, 0.f, 5.f);
-    glm::vec3 m_camDir   = glm::vec3(0.f, 0.f, -1.f);
-    glm::vec3 m_camUp    = glm::vec3(0.f, 1.f, 0.f);
-    float     m_moveSpeed = 4.f;
-    float     m_turnSpeed = 0.003f;
 
-    // Shader Program
-    GLuint m_shader;
+    // Camera state
+    glm::vec3 m_camPos;
+    glm::vec3 m_camDir;
+    glm::vec3 m_camUp;
+    float m_moveSpeed = 4.f;
+    float m_turnSpeed = 0.003f;
 
-    // Shape VAO/VBO Management
+    // Input state
+    bool m_mouseDown = false;
+    glm::vec2 m_prevMouse;
+    std::unordered_map<Qt::Key, bool> m_keyMap;
+
+    // Timing
+    int m_timer;
+    QElapsedTimer m_elapsed;
+
+    double m_devicePixelRatio;
+
+    // === NEW DEFERRED PIPELINE ===
+    GBuffer* gbuffer = nullptr;
+    DeferredRenderer* deferred = nullptr;
+    PostProcessPass* post = nullptr;
+
+    ShaderProgram* shaderGBuffer = nullptr;
+
+    // CPU-side VAO management for shapes
     struct ShapeVAO {
         GLuint vao;
         GLuint vbo;
         int vertexCount;
+        glm::mat4 ctm;
+        SceneMaterial mat;
     };
     std::vector<ShapeVAO> m_shapeVAOs;
 
-    // Helper functions
-    void initializeShaders();
     void loadScene();
     void generateShapeVAOs();
+    std::vector<float> generateShapeData(PrimitiveType type, int p1, int p2);
     void cleanupVAOs();
-    std::vector<float> generateShapeData(PrimitiveType type, int param1, int param2);
-
-    // Tick Related Variables
-    int m_timer;
-    QElapsedTimer m_elapsedTimer;
-    // Input Related Variables
-    bool m_mouseDown = false;
-    glm::vec2 m_prev_mouse_pos;
-    std::unordered_map<Qt::Key, bool> m_keyMap;
-
-    // Device Correction Variables
-    double m_devicePixelRatio;
 };
 

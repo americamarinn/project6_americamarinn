@@ -53,6 +53,7 @@ add_executable(${PROJECT_NAME}
     src/utils/gbuffer.h src/utils/gbuffer.cpp
     src/utils/deferredrenderer.h src/utils/deferredrenderer.cpp
     src/utils/postprocesspass.h src/utils/postprocesspass.cpp
+    src/utils/shaderprogram.h src/utils/shaderprogram.cpp
 
 
 )
@@ -82,6 +83,16 @@ qt6_add_resources(${PROJECT_NAME} "Resources"
     FILES
         resources/shaders/default.frag
         resources/shaders/default.vert
+        resources/shaders/gbuffer.vert
+        resources/shaders/gbuffer.frag
+        resources/shaders/fullscreen_quad.vert
+        resources/shaders/deferredLighting.frag
+
+        # BLOOM SHADERS (must match EXACT filenames)
+        resources/shaders/bloom_extract.frag
+        resources/shaders/blur_h.frag
+        resources/shaders/blur_v.frag
+        resources/shaders/composite.frag
 )
 
 # GLEW: this provides support for Windows (including 64-bit)
