@@ -1,21 +1,17 @@
 #version 330 core
-layout(location = 0) in vec3 pos;
-layout(location = 1) in vec3 nor;
-layout(location = 2) in vec2 uv_in;
-
-out vec3 worldPos;
-out vec3 worldNormal;
-out vec2 texCoord;
+layout(location = 0) in vec3 aPos;
+layout(location = 1) in vec3 aNor;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
-void main() {
-    vec4 wp = model * vec4(pos, 1.0);
-    worldPos = wp.xyz;
-    worldNormal = mat3(model) * nor;
-    texCoord = uv_in;
+out vec3 vPos;
+out vec3 vNor;
 
+void main() {
+    vec4 wp = model * vec4(aPos, 1.0);
+    vPos = wp.xyz;
+    vNor = mat3(model) * aNor;
     gl_Position = proj * view * wp;
 }

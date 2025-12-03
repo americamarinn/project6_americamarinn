@@ -1,0 +1,92 @@
+{
+  "name": "Neon Single Tube",
+  "globalData": {
+    "ambientCoeff": 0.05,
+    "diffuseCoeff": 0.8,
+    "specularCoeff": 0.6,
+    "transparentCoeff": 0.0
+  },
+  "cameraData": {
+    "position": [0.0, 1.5, 6.0],
+    "up": [0.0, 1.0, 0.0],
+    "heightAngle": 35.0,
+    "focus": [0.0, 1.0, 0.0]
+  },
+  "groups": [
+    {
+      "name": "Room",
+      "groups": [
+        {
+          "name": "Floor",
+          "translate": [0.0, -1.0, 0.0],
+          "scale": [10.0, 0.2, 10.0],
+          "primitives": [
+            {
+              "type": "cube",
+              "ambient": [0.01, 0.01, 0.01],
+              "diffuse": [0.02, 0.02, 0.02],
+              "specular": [0.0, 0.0, 0.0],
+              "shininess": 5.0
+            }
+          ]
+        },
+        {
+          "name": "Back Wall",
+          "translate": [0.0, 1.0, -4.5],
+          "scale": [10.0, 5.0, 0.2],
+          "primitives": [
+            {
+              "type": "cube",
+              "ambient": [0.01, 0.01, 0.02],
+              "diffuse": [0.03, 0.03, 0.06],
+              "specular": [0.0, 0.0, 0.0],
+              "shininess": 5.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Fill Light",
+      "translate": [3.0, 4.0, 3.0],
+      "lights": [
+        {
+          "type": "directional",
+          "color": [0.1, 0.1, 0.15],
+          "direction": [-1.0, -1.0, -1.0]
+        }
+      ]
+    },
+    {
+      "name": "Neon Tube Group",
+      "translate": [0.0, 1.0, -3.9],
+      "groups": [
+        {
+          "name": "Neon Tube",
+          "rotate": [0.0, 0.0, 1.0, 90.0],
+          "scale": [2.5, 0.06, 0.06],
+          "primitives": [
+            {
+              "type": "cylinder",
+              "ambient": [0.0, 0.1, 0.1],
+              "diffuse": [0.0, 1.0, 1.3],
+              "specular": [0.6, 0.9, 0.9],
+              "shininess": 80.0
+            }
+          ]
+        },
+        {
+          "name": "Neon Tube Light",
+          "translate": [0.0, 0.0, 0.0],
+          "lights": [
+            {
+              "type": "point",
+              "color": [0.0, 3.0, 3.0],
+              "attenuationCoeff": [1.0, 0.1, 0.02]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

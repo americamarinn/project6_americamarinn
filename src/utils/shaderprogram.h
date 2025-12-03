@@ -11,18 +11,17 @@ class ShaderProgram {
 public:
     GLuint id;
 
-    ShaderProgram(const char* vertPath, const char* fragPath);
-    ~ShaderProgram();
+    ShaderProgram();
+    ShaderProgram(const std::string& vs, const std::string& fs);
 
-    void bind();
-    void unbind();
+    void attachShader(const std::string& path, GLenum type);
+    void link();
+    void use();
+    void bind(); // compatibility alias
 
-    // Uniforms
-    void setUniform1i(const char* name, int v);
-    void setUniform1f(const char* name, float v);
-    void setUniform3f(const char* name, float x, float y, float z);
-    void setUniformMat4(const char* name, const glm::mat4 &mat);
+    void setUniform1i(const std::string& name, int v);
+    void setUniform1f(const std::string& name, float v);
 
-private:
-    GLuint loadShader(const char* path, GLenum type);
+    void setUniform3f(const std::string& name, const glm::vec3& v);
+    void setUniform3f(const std::string& name, float x, float y, float z);
 };

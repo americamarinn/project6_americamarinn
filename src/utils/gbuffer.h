@@ -6,20 +6,14 @@
 
 class GBuffer {
 public:
-    GBuffer(int w, int h);
-    ~GBuffer();
+    GLuint fbo;
+    GLuint texPosition;
+    GLuint texNormal;
+    GLuint texAlbedo;
+    GLuint texEmissive;
+    GLuint depthRBO;
 
+    void init(int w, int h);
     void bind();
     void unbind();
-    void resize(int w, int h);
-
-    GLuint fbo;
-    GLuint posTex;
-    GLuint normalTex;
-    GLuint albedoTex;
-    GLuint emissiveTex;
-    GLuint depthRbo;
-
-private:
-    void createAttachment(GLuint &tex, GLint internalFormat, GLenum format, int w, int h);
 };

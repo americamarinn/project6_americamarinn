@@ -3,7 +3,9 @@
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
 #endif
+
 #include <GL/glew.h>
+#include <memory>
 #include "shaderprogram.h"
 
 class PostProcessPass {
@@ -12,17 +14,33 @@ public:
     ~PostProcessPass();
 
     void init(int w, int h);
+    void resize(int w, int h);
 
-    GLuint extractBright(GLuint sceneTex, int w, int h);
-    GLuint blur(GLuint inputTex, int w, int h);
-    void composite(GLuint sceneTex, GLuint bloomTex, int w, int h);
+    // Main entry point:
+    void render(GLuint hdrColorTex);
+
+    GLuint getOutputTexture() const { return m_finalTex; }
 
 private:
-    ShaderProgram* extractShader;
-    ShaderProgram* blurShader;
-    ShaderProgram* compositeShader;
+    int m_width, m_height;
 
-    GLuint quadVAO, quadVBO;
+    GLuint m_extractFBO = 0;
+    GLuint m_extractTex = 0;
 
-    void initQuad();
+    GLuint m_pingFBO = 0;
+    GLuint m_pingTex = 0;
+
+    GLuint m_pongFBO = 0;
+    GLuint m_pongTex = 0;
+
+    GLuint m_finalFBO = 0;
+    GLuint m_finalTex = 0;
+
+    std::unique_ptr<ShaderProgram> m_extractShader;
+    std::unique_ptr<ShaderProgram> m_blurHShader;
+    std::unique_ptr<ShaderProgram> m_blurVShader;
+    std::unique_ptr<ShaderProgram> m_compositeShader;
+
+    void initTextures();
+    void initFBOs();
 };

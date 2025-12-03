@@ -1,18 +1,17 @@
 #version 330 core
-
-in vec2 texCoord;
-out vec4 fragColor;
+out vec4 FragColor;
+in vec2 uv;
 
 uniform sampler2D sceneTex;
 uniform sampler2D bloomTex;
 
 void main()
 {
-    vec3 sceneColor = texture(sceneTex, texCoord).rgb;
-    vec3 bloomColor = texture(bloomTex, texCoord).rgb;
+    vec3 scene = texture(sceneTex, uv).rgb;
+    vec3 bloom = texture(bloomTex, uv).rgb;
 
-    // Simply add bloom — can be tuned or multiplied
-    vec3 finalColor = sceneColor + bloomColor;
+    // HDR bloom combine
+    vec3 color = scene + bloom;
 
-    fragColor = vec4(finalColor, 1.0);
+    FragColor = vec4(color, 1.0);
 }
